@@ -1,5 +1,8 @@
 export const App = () => {
   return (
-    <h1>React Boilerplate</h1>
+    <div>
+      <h1>Welcome to the Gym App</h1>
+      <p>Your fitness journey starts here!</p>
+    </div>
   )
 }
