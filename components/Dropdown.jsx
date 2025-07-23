@@ -100,7 +100,6 @@ export const Dropdown = ({
   zIndex,
   disabled = false,
   searchable = false,
-  clearable = false,
   multiple = false,
   customButton,
   customItem,
