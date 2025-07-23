@@ -1,4 +1,8 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080'
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.PROD
+    ? 'https://gym-app-api-34r7.onrender.com'
+    : 'http://localhost:8080')
 
 class ApiService {
   async request(endpoint, options = {}) {
