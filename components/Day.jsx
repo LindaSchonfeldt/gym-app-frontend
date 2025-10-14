@@ -1,23 +1,12 @@
-import styled from 'styled-components'
 import { Exercise } from './Exercise'
 
-const DayContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
-`
-const DayTitle = styled.h1`
-  font-size: 24px;
-  margin-bottom: 10px;
-`
 export const Day = ({ day, exercises }) => {
   return (
-    <DayContainer>
-      <DayTitle>Day {day}</DayTitle>
+    <div className='flex flex-col items-center mb-5'>
+      <h1 className='text-2xl mb-2.5'>Day {day}</h1>
       {exercises.map((exercise, index) => (
         <Exercise key={index} {...exercise} />
       ))}
-    </DayContainer>
+    </div>
   )
 }

@@ -1,85 +1,4 @@
 import { useState, useRef, useEffect } from 'react'
-import styled from 'styled-components'
-
-const DropdownContainer = styled.div`
-  position: relative;
-  display: inline-block;
-  z-index: ${(props) => props.zIndex || 1000};
-  width: ${(props) => props.width || '200px'};
-`
-
-const DropdownButton = styled.div`
-  background-color: ${(props) => props.bgColor || '#f9f9f9'};
-  border: 1px solid ${(props) => props.borderColor || '#ccc'};
-  border-radius: ${(props) => props.borderRadius || '4px'};
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: ${(props) => props.padding || '10px'};
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  user-select: none;
-
-  &:hover {
-    background-color: ${(props) => props.hoverColor || '#e9e9e9'};
-  }
-`
-
-const DropdownMenu = styled.div`
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  max-height: ${(props) => props.maxHeight || '300px'};
-  overflow-y: auto;
-  z-index: ${(props) => props.zIndex || 1001};
-  display: ${(props) => (props.isOpen ? 'block' : 'none')};
-  margin-top: 2px;
-`
-
-const DropdownItem = styled.div`
-  padding: 10px 15px;
-  cursor: pointer;
-  border-bottom: 1px solid #f0f0f0;
-
-  &:hover {
-    background-color: #f5f5f5;
-  }
-
-  &:last-child {
-    border-bottom: none;
-  }
-`
-
-const ArrowIcon = styled.span`
-  transform: ${(props) => (props.isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
-  transition: transform 0.2s ease;
-  font-size: 12px;
-`
-
-const SearchContainer = styled.div`
-  padding: 10px;
-  border-bottom: 1px solid #f0f0f0;
-`
-
-const SearchInput = styled.input`
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  font-size: 14px;
-  box-sizing: border-box;
-
-  &:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-  }
-`
 
 export const Dropdown = ({
   placeholder = 'Select an option',
@@ -90,20 +9,20 @@ export const Dropdown = ({
   onSelect,
   onOpen,
   onClose,
-  width = '200px',
-  bgColor,
-  borderColor,
-  borderRadius,
-  padding,
-  hoverColor,
-  maxHeight,
-  zIndex,
+  width = 'w-48', // Tailwind width class
+  bgColor = 'bg-gray-50',
+  borderColor = 'border-gray-300',
+  borderRadius = 'rounded',
+  padding = 'p-2.5',
+  hoverColor = 'hover:bg-gray-200',
+  maxHeight = 'max-h-72',
+  zIndex = 'z-50',
   disabled = false,
   searchable = false,
   multiple = false,
   customButton,
   customItem,
-  className,
+  className = '',
   ...rest
 }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -183,22 +102,24 @@ export const Dropdown = ({
       return customButton({ isOpen, selectedValue, toggleDropdown })
     }
 
+    const buttonClasses = `
+      ${bgColor} border ${borderColor} ${borderRadius} shadow-sm ${padding} 
+      cursor-pointer flex justify-between items-center select-none
+      ${hoverColor} transition-colors duration-200
+      ${disabled ? 'opacity-60 cursor-not-allowed' : ''}
+    `.trim()
+
     return (
-      <DropdownButton
-        onClick={toggleDropdown}
-        bgColor={bgColor}
-        borderColor={borderColor}
-        borderRadius={borderRadius}
-        padding={padding}
-        hoverColor={hoverColor}
-        style={{
-          opacity: disabled ? 0.6 : 1,
-          cursor: disabled ? 'not-allowed' : 'pointer'
-        }}
-      >
+      <div onClick={toggleDropdown} className={buttonClasses}>
         <span>{getDisplayValue()}</span>
-        <ArrowIcon isOpen={isOpen}>▼</ArrowIcon>
-      </DropdownButton>
+        <span
+          className={`text-xs transition-transform duration-200 ${
+            isOpen ? 'rotate-180' : 'rotate-0'
+          }`}
+        >
+          ▼
+        </span>
+      </div>
     )
   }
 
@@ -223,43 +144,50 @@ export const Dropdown = ({
         : option[valueKey] || `option-${index}`
 
     return (
-      <DropdownItem key={itemKey} onClick={() => handleItemClick(option)}>
+      <div
+        key={itemKey}
+        onClick={() => handleItemClick(option)}
+        className='px-4 py-2.5 cursor-pointer border-b border-gray-100 hover:bg-gray-50 last:border-b-0'
+      >
         {displayValue}
-      </DropdownItem>
+      </div>
     )
   }
 
+  const containerClasses =
+    `relative inline-block ${width} ${zIndex} ${className}`.trim()
+  const menuClasses = `
+    absolute top-full left-0 right-0 bg-white border border-gray-300 
+    ${borderRadius} shadow-lg ${maxHeight} overflow-y-auto mt-0.5
+    ${isOpen ? 'block' : 'hidden'}
+  `.trim()
+
   return (
-    <DropdownContainer
-      ref={dropdownRef}
-      width={width}
-      zIndex={zIndex}
-      className={className}
-      {...rest}
-    >
+    <div ref={dropdownRef} className={containerClasses} {...rest}>
       {renderButton()}
 
-      <DropdownMenu isOpen={isOpen} maxHeight={maxHeight} zIndex={zIndex}>
+      <div className={menuClasses}>
         {searchable && (
-          <SearchContainer>
-            <SearchInput
+          <div className='p-2.5 border-b border-gray-100'>
+            <input
               type='text'
               placeholder='Search...'
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onClick={(e) => e.stopPropagation()}
+              className='w-full px-2 py-1.5 border border-gray-300 rounded text-sm box-border focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
             />
-          </SearchContainer>
+          </div>
         )}
 
         {filteredOptions.length === 0 ? (
-          <DropdownItem>
+          <div className='px-4 py-2.5 cursor-pointer border-b border-gray-100 last:border-b-0'>
             {searchTerm ? 'No matching options' : 'No options available'}
-          </DropdownItem>
+          </div>
         ) : (
           filteredOptions.map((option, index) => renderItem(option, index))
         )}
-      </DropdownMenu>
-    </DropdownContainer>
+      </div>
+    </div>
   )
 }
