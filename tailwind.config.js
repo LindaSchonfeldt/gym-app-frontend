@@ -61,7 +61,23 @@ export default {
         success: '#10b981',
         warning: '#f59e0b',
         error: '#ef4444',
-        info: '#3b82f6'
+        info: '#3b82f6',
+        // Theme variants (moved from themes section)
+        powerlifting: {
+          primary: '#dc2626', // Red
+          secondary: '#000000', // Black
+          accent: '#fbbf24' // Gold
+        },
+        cardio: {
+          primary: '#059669', // Green
+          secondary: '#0ea5e9', // Blue
+          accent: '#f59e0b' // Orange
+        },
+        yoga: {
+          primary: '#7c3aed', // Purple
+          secondary: '#ec4899', // Pink
+          accent: '#10b981' // Green
+        }
       },
       // Custom fonts
       fontFamily: {
@@ -104,27 +120,7 @@ export default {
           '100%': { transform: 'translateY(0)', opacity: '1' }
         }
       }
-    },
-    // Add your themes here
-    themes: {
-      powerlifting: {
-        primary: '#dc2626', // Red
-        secondary: '#000000', // Black
-        accent: '#fbbf24' // Gold
-      },
-      cardio: {
-        primary: '#059669', // Green
-        secondary: '#0ea5e9', // Blue
-        accent: '#f59e0b' // Orange
-      },
-      yoga: {
-        primary: '#7c3aed', // Purple
-        secondary: '#ec4899', // Pink
-        accent: '#10b981' // Green
-      }
     }
   },
-  plugins: [
-    // You can add plugins here for additional functionality
-  ]
+  plugins: []
 }
