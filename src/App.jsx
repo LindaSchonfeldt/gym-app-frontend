@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Dropdown } from '../components/Dropdown'
+import { Dropdown } from './components/Dropdown'
 import { useBodyParts, useEquipmentTypes } from './hooks/useExerciseQueries'
 import { ExerciseProvider } from './context/ExerciseContext'
 

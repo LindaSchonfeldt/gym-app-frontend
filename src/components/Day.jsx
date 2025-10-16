@@ -1,4 +1,4 @@
-import { Exercise } from './Exercise'
+import { Exercise } from '../../components/Exercise'
 
 export const Day = ({ day, exercises }) => {
   return (
